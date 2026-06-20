@@ -1,4 +1,4 @@
-const upstreamEndpoint = "https://cv-rag-assistant.onrender.com/response";
+const upstreamEndpoint = "https://cv-rag-assistant-production.up.railway.app/response";
 
 export async function POST(request: Request) {
   try {

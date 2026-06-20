@@ -99,11 +99,11 @@ export function ChatWindow() {
                 Personal career assistant
               </div>
               <h1 className="max-w-2xl text-[34px] font-semibold leading-[1.08] tracking-[-0.035em] text-[#101312] sm:text-[46px]">
-                Hire Nirmal with the right context.
+                Meet the talent behind the CV.
               </h1>
               <p className="mt-4 max-w-xl text-sm leading-6 text-[#6d7471] sm:text-[15px]">
-                Ask about Nirmal Nipuna Nanayakkara&apos;s CV, career,
-                projects, or technical skills.
+                👋 Hi! I&apos;m Nirmal Nipuna Nanayakkara&apos;s AI assistant. How
+                can I help you today?
               </p>
             </div>
 
