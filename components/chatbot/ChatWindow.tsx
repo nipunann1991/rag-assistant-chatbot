@@ -1,0 +1,164 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import type { ChatMessage as ChatMessageType } from "@/types/chat";
+import { ChatInput } from "./ChatInput";
+import { ChatMessage } from "./ChatMessage";
+
+const apiEndpoint = "/api/response";
+const fallbackResponse =
+  "I could not get a response right now. Please try asking again.";
+
+const suggestions = [
+  "Tell me about Nirmal's experience",
+  "What projects has Nirmal worked on?",
+  "What are Nirmal's strongest technical skills?",
+  "Why should we hire Nirmal?",
+];
+
+function createMessage(
+  role: ChatMessageType["role"],
+  content: string,
+): ChatMessageType {
+  return {
+    id: `${role}-${Date.now()}-${crypto.randomUUID()}`,
+    role,
+    content,
+  };
+}
+
+export function ChatWindow() {
+  const [messages, setMessages] = useState<ChatMessageType[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  async function getAssistantResponse(content: string) {
+    const response = await fetch(apiEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: content }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    const data: unknown = await response.json();
+
+    if (
+      typeof data === "object" &&
+      data !== null &&
+      "answer" in data &&
+      typeof data.answer === "string"
+    ) {
+      return data.answer;
+    }
+
+    throw new Error("Response did not include an answer.");
+  }
+
+  async function handleSendMessage(content: string) {
+    if (isLoading) return;
+
+    const userMessage = createMessage("user", content);
+    setMessages((currentMessages) => [...currentMessages, userMessage]);
+    setIsLoading(true);
+
+    try {
+      const answer = await getAssistantResponse(content);
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        createMessage("assistant", answer),
+      ]);
+    } catch (error) {
+      console.error(error);
+      setMessages((currentMessages) => [
+        ...currentMessages,
+        createMessage("assistant", fallbackResponse),
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <section className="flex flex-1 flex-col justify-end gap-7 pb-2 sm:gap-9">
+      <div className="flex flex-1 flex-col justify-center pt-8">
+        {messages.length === 0 ? (
+          <div className="mx-auto flex w-full flex-col items-center">
+            <div className="mb-28 flex flex-col items-center text-center max-sm:mb-16">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/72 px-3 py-1.5 text-xs font-semibold text-[#47615c] shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur">
+                <span className="size-2 rounded-full bg-[#14b88a]" />
+                Personal career assistant
+              </div>
+              <h1 className="max-w-2xl text-[34px] font-semibold leading-[1.08] tracking-[-0.035em] text-[#101312] sm:text-[46px]">
+                Hire Nirmal with the right context.
+              </h1>
+              <p className="mt-4 max-w-xl text-sm leading-6 text-[#6d7471] sm:text-[15px]">
+                Ask about Nirmal Nipuna Nanayakkara&apos;s CV, career,
+                projects, or technical skills.
+              </p>
+            </div>
+
+            <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+              {suggestions.map((suggestion) => (
+                <button
+                  key={suggestion}
+                  type="button"
+                  onClick={() => handleSendMessage(suggestion)}
+                  disabled={isLoading}
+                  className="group min-h-16 rounded-2xl border border-white/80 bg-white/78 px-5 text-left text-[13px] font-semibold text-[#68716e] shadow-[0_12px_34px_rgba(15,23,42,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#cfded9] hover:bg-white hover:text-[#25302d] hover:shadow-[0_18px_44px_rgba(15,23,42,0.09)] disabled:cursor-wait disabled:opacity-60"
+                >
+                  <span className="flex items-center justify-between gap-4">
+                    {suggestion}
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#f0f4f2] text-[#8a9691] transition group-hover:bg-[#13211d] group-hover:text-white">
+                      <svg
+                        aria-hidden="true"
+                        className="size-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M7 17 17 7m0 0H9m8 0v8"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                        />
+                      </svg>
+                    </span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="mx-auto flex max-h-[calc(100vh-15rem)] w-full flex-col gap-4 overflow-y-auto rounded-[24px] p-4">
+            {messages.map((message) => (
+              <ChatMessage key={message.id} message={message} />
+            ))}
+            {isLoading ? (
+              <ChatMessage
+                message={{
+                  id: "assistant-loading",
+                  role: "assistant",
+                  content: "Thinking...",
+                }}
+              />
+            ) : null}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
+
+      <ChatInput isLoading={isLoading} onSendMessage={handleSendMessage} />
+    </section>
+  );
+}
