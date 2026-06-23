@@ -147,9 +147,9 @@ export function ChatWindow() {
                   type="button"
                   onClick={() => handleSendMessage(suggestion)}
                   disabled={isLoading}
-                  className="group min-h-12 rounded-xl border border-white/80 bg-white/78 px-4 py-2.5 text-left text-xs font-medium leading-5 text-[#68716e] shadow-[0_10px_28px_rgba(15,23,42,0.05)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#cfded9] hover:bg-white hover:text-[#25302d] hover:shadow-[0_16px_38px_rgba(15,23,42,0.08)] disabled:cursor-wait disabled:opacity-60 sm:min-h-14 sm:rounded-2xl sm:px-5 sm:text-[13px]"
+                  className="group min-h-12 rounded-xl border border-white/80 bg-white/78 px-4 py-2.5 text-left text-xs font-semibold leading-5 text-[#929795] shadow-[0_10px_28px_rgba(15,23,42,0.05)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#cfded9] hover:bg-white hover:text-[#25302d] hover:shadow-[0_16px_38px_rgba(15,23,42,0.08)] disabled:cursor-wait disabled:opacity-60 sm:min-h-14 sm:rounded-2xl sm:px-5 sm:text-[13px]"
                 >
-                  <span className="flex items-center justify-between gap-4">
+                  <span className="flex items-center justify-between gap-4 font-sans">
                     {suggestion}
                     <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-[#f0f4f2] text-[#8a9691] transition group-hover:bg-[#13211d] group-hover:text-white sm:size-7">
                       <svg
@@ -173,7 +173,7 @@ export function ChatWindow() {
             </div>
           </div>
         ) : (
-          <div className="mx-auto flex max-h-[calc(100vh-15rem)] w-full flex-col gap-4 overflow-y-auto rounded-[24px] px-5 py-4 sm:p-4">
+          <div className="mx-auto flex max-h-[calc(100vh-15rem)] w-full flex-col gap-4 overflow-y-auto rounded-[24px] py-4 sm:p-4">
             {messages.map((message) => (
               <ChatMessage key={message.id} message={message} />
             ))}
