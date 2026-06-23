@@ -33,7 +33,7 @@ export function ChatInput({ isLoading, onSendMessage }: ChatInputProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="min-h-36 rounded-[24px] border border-white/80 bg-white/88 p-4 shadow-[0_20px_55px_rgba(15,23,42,0.1)] backdrop-blur"
+      className="min-h-36 rounded-[24px] border border-white/80 bg-white/88 px-5 py-4 shadow-[0_20px_55px_rgba(15,23,42,0.1)] backdrop-blur sm:p-4"
     >
       <div className="flex h-full min-h-28 flex-col">
         <textarea
