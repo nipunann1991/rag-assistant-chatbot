@@ -32,6 +32,7 @@ export function ChatWindow() {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const hasMessages = messages.length > 0;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -88,10 +89,42 @@ export function ChatWindow() {
     }
   }
 
+  function handleBackHome() {
+    if (isLoading) return;
+    setMessages([]);
+  }
+
   return (
     <section className="flex flex-1 flex-col justify-end gap-7 pb-2 sm:gap-9">
+      {hasMessages ? (
+        <div className="flex justify-start pt-3">
+          <button
+            type="button"
+            onClick={handleBackHome}
+            disabled={isLoading}
+            aria-label="Back to Home"
+            className="group inline-flex size-10 items-center justify-center rounded-full border border-white/80 bg-white/78 text-[#56635f] shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#cfded9] hover:bg-white hover:text-[#111f1b] disabled:cursor-wait disabled:opacity-60"
+          >
+            <svg
+              aria-hidden="true"
+              className="size-4"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="m15 18-6-6 6-6"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+              />
+            </svg>
+          </button>
+        </div>
+      ) : null}
+
       <div className="flex flex-1 flex-col justify-center pt-8">
-        {messages.length === 0 ? (
+        {!hasMessages ? (
           <div className="mx-auto flex w-full flex-col items-center">
             <div className="mb-28 flex flex-col items-center text-center max-sm:mb-16">
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/72 px-3 py-1.5 text-xs font-semibold text-[#47615c] shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur">
