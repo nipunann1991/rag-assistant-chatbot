@@ -11,6 +11,7 @@ type ChatInputProps = {
 export function ChatInput({ isLoading, onSendMessage }: ChatInputProps) {
   const [message, setMessage] = useState("");
   const canSend = message.trim().length > 0 && !isLoading;
+  const hasMessage = message.trim().length > 0;
 
   function sendMessage() {
     if (!canSend) return;
@@ -49,9 +50,13 @@ export function ChatInput({ isLoading, onSendMessage }: ChatInputProps) {
         <div className="flex items-end justify-end">
           <button
             type="submit"
-            disabled={!canSend}
+            disabled={isLoading}
             aria-label="Send message"
-            className="flex size-9 items-center justify-center rounded-full bg-[#edf1ef] text-[#b8c0bc] transition hover:bg-[#e1e8e5] enabled:bg-[#111f1b] enabled:text-white enabled:shadow-[0_10px_24px_rgba(17,31,27,0.22)] disabled:cursor-not-allowed"
+            className={`flex size-9 items-center justify-center rounded-full bg-[#111f1b] text-white transition hover:bg-[#1a2c27] disabled:cursor-wait disabled:bg-[#edf1ef] disabled:text-[#b8c0bc] disabled:shadow-none ${
+              hasMessage
+                ? "shadow-[0_10px_24px_rgba(17,31,27,0.22)] hover:scale-105"
+                : ""
+            }`}
           >
             <svg
               aria-hidden="true"
