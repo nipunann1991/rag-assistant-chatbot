@@ -147,7 +147,7 @@ export function ChatWindow() {
                   type="button"
                   onClick={() => handleSendMessage(suggestion)}
                   disabled={isLoading}
-                  className="group min-h-12 rounded-xl border border-white/80 bg-white/78 px-4 py-2.5 text-left text-xs font-semibold leading-5 text-[#929795] shadow-[0_10px_28px_rgba(15,23,42,0.05)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#cfded9] hover:bg-white hover:text-[#25302d] hover:shadow-[0_16px_38px_rgba(15,23,42,0.08)] disabled:cursor-wait disabled:opacity-60 sm:min-h-14 sm:rounded-2xl sm:px-5 sm:text-[13px]"
+                  className="group min-h-12 rounded-xl border border-white/80 bg-white/78 px-4 py-2.5 text-left text-xs font-semibold leading-5 text-[#626564] shadow-[0_10px_28px_rgba(15,23,42,0.05)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#cfded9] hover:bg-white hover:text-[#25302d] hover:shadow-[0_16px_38px_rgba(15,23,42,0.08)] disabled:cursor-wait disabled:opacity-60 sm:min-h-14 sm:rounded-2xl sm:px-5 sm:text-[13px]"
                 >
                   <span className="flex items-center justify-between gap-4 font-sans">
                     {suggestion}
